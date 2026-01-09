@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Early Web3 Radar 🚀</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -122,16 +123,12 @@
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 500;
+            margin-left: 10px;
         }
 
         .badge-new {
             background: #dcfce7;
             color: #166534;
-        }
-
-        .badge-hot {
-            background: #fee2e2;
-            color: #991b1b;
         }
 
         .website-link {
@@ -149,182 +146,21 @@
             line-height: 1.5;
         }
 
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
         .footer {
             text-align: center;
             color: white;
-            margin-top: 40px;
-            opacity: 0.8;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .table-container {
-                overflow-x: auto;
-            }
-            
-            th, td {
-                padding: 12px;
-                font-size: 0.9rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>🚀 Early Web3 Radar</h1>
-            <p class="subtitle">Discovering new web3 projects on Twitter • Updated daily</p>
-            
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-number">127</div>
-                    <div class="stat-label">Projects Discovered</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">23</div>
-                    <div class="stat-label">Added Today</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">< 1K</div>
-                    <div class="stat-label">Avg Followers</div>
-                </div>
-            </div>
-        </header>
-
-        <div class="table-container">
-            <table id="projectsTable">
-                <thead>
-                    <tr>
-                        <th>Project</th>
-                        <th>Twitter</th>
-                        <th>Created</th>
-                        <th>Followers</th>
-                        <th>Description</th>
-                        <th>Link</th>
-                    </tr>
-                </thead>
-                <tbody id="projectsBody">
-                    <!-- Projects will be inserted here -->
-                </tbody>
-            </table>
-        </div>
-
-        <div class="footer">
-            <p>Last updated: <span id="lastUpdate"></span></p>
-        </div>
-    </div>
-
-    <script>
-        // Mock data for Web3 projects
-        const projects = [
-            {
-                name: "ZkChain Protocol",
-                handle: "zkchainxyz",
-                created: "2025-01-05",
-                followers: 342,
-                description: "Zero-knowledge rollup infrastructure for scalable DeFi applications",
-                website: "https://zkchain.xyz",
-                badge: "new"
-            },
-            {
-                name: "DecentraVault",
-                handle: "decentravault",
-                created: "2025-01-03",
-                followers: 567,
-                description: "Decentralized secure storage protocol with on-chain encryption",
-                website: "https://decentravault.io",
-                badge: "hot"
-            },
-            {
-                name: "LiquidSwap DEX",
-                handle: "liquidswapfi",
-                created: "2025-01-02",
-                followers: 891,
-                description: "Next-gen AMM with concentrated liquidity and MEV protection",
-                website: "https://liquidswap.fi",
-                badge: "hot"
-            },
-            {
-                name: "ChainBridge",
-                handle: "chainbridge_io",
-                created: "2024-12-28",
-                followers: 423,
-                description: "Cross-chain bridge protocol supporting 15+ blockchain networks",
-                website: "https://chainbridge.io",
-                badge: "new"
-            },
-            {
-                name: "AI Oracle Network",
-                handle: "aioraclenet",
-                created: "2024-12-25",
-                followers: 678,
-                description: "Decentralized AI oracle providing off-chain compute for smart contracts",
-                website: "https://aioracle.net",
-                badge: "new"
-            },
-            {
-                name: "MetaLend Protocol",
-                handle: "metalendxyz",
-                created: "2024-12-22",
-                followers: 534,
-                description: "Peer-to-peer lending protocol with NFT collateral support",
-                website: "https://metalend.xyz",
-                badge: "new"
-            },
-            {
-                name: "GameFi Launchpad",
-                handle: "gamefilaunch",
-                created: "2024-12-20",
-                followers: 912,
-                description: "IDO platform specialized in gaming and metaverse projects",
-                website: "https://gamefilaunch.com",
-                badge: "hot"
-            },
-            {
-                name: "QuantumDAO",
-                handle: "quantum_dao",
-                created: "2024-12-18",
-                followers: 445,
-                description: "Governance protocol enabling quantum-resistant on-chain voting",
-                website: "https://quantumdao.org",
-                badge: "new"
-            }
-        ];
-
-        // Render projects
-        function renderProjects() {
-            const tbody = document.getElementById('projectsBody');
-            tbody.innerHTML = projects.map(project => `
-                <tr>
-                    <td>
-                        <div class="project-name">${project.name}</div>
-                        <span class="badge badge-${project.badge}">${project.badge.toUpperCase()}</span>
-                    </td>
-                    <td>
-                        <a href="https://twitter.com/${project.handle}" 
-                           target="_blank" 
-                           class="twitter-handle">@${project.handle}</a>
-                    </td>
-                    <td>${new Date(project.created).toLocaleDateString()}</td>
-                    <td>${project.followers}</td>
-                    <td class="description">${project.description}</td>
-                    <td>
-                        <a href="${project.website}" 
-                           target="_blank" 
-                           class="website-link">Visit →</a>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // Set last update time
-        document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
-
-        // Initialize
-        renderProjects();
-    </script>
-</body>
-</html>
+            margin-top:
