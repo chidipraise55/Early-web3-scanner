@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Early Web3 Radar 🚀</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        td {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr:hover {
+            background: #f8f9ff;
+        }
+
+        .project-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.05rem;
+        }
+
+        .twitter-handle {
+            color: #1DA1F2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .twitter-handle:hover {
+            text-decoration: underline;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .badge-new {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-hot {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .website-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .website-link:hover {
+            text-decoration: underline;
+        }
+
+        .description {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            th, td {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Early Web3 Radar</h1>
+            <p class="subtitle">Discovering new web3 projects on Twitter • Updated daily</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">127</div>
+                    <div class="stat-label">Projects Discovered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Added Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">< 1K</div>
+                    <div class="stat-label">Avg Followers</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="table-container">
+            <table id="projectsTable">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Twitter</th>
+                        <th>Created</th>
+                        <th>Followers</th>
+                        <th>Description</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody id="projectsBody">
+                    <!-- Projects will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>Last updated: <span id="lastUpdate"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Mock data for Web3 projects
+        const projects = [
+            {
+                name: "ZkChain Protocol",
+                handle: "zkchainxyz",
+                created: "2025-01-05",
+                followers: 342,
+                description: "Zero-knowledge rollup infrastructure for scalable DeFi applications",
+                website: "https://zkchain.xyz",
+                badge: "new"
+            },
+            {
+                name: "DecentraVault",
+                handle: "decentravault",
+                created: "2025-01-03",
+                followers: 567,
+                description: "Decentralized secure storage protocol with on-chain encryption",
+                website: "https://decentravault.io",
+                badge: "hot"
+            },
+            {
+                name: "LiquidSwap DEX",
+                handle: "liquidswapfi",
+                created: "2025-01-02",
+                followers: 891,
+                description: "Next-gen AMM with concentrated liquidity and MEV protection",
+                website: "https://liquidswap.fi",
+                badge: "hot"
+            },
+            {
+                name: "ChainBridge",
+                handle: "chainbridge_io",
+                created: "2024-12-28",
+                followers: 423,
+                description: "Cross-chain bridge protocol supporting 15+ blockchain networks",
+                website: "https://chainbridge.io",
+                badge: "new"
+            },
+            {
+                name: "AI Oracle Network",
+                handle: "aioraclenet",
+                created: "2024-12-25",
+                followers: 678,
+                description: "Decentralized AI oracle providing off-chain compute for smart contracts",
+                website: "https://aioracle.net",
+                badge: "new"
+            },
+            {
+                name: "MetaLend Protocol",
+                handle: "metalendxyz",
+                created: "2024-12-22",
+                followers: 534,
+                description: "Peer-to-peer lending protocol with NFT collateral support",
+                website: "https://metalend.xyz",
+                badge: "new"
+            },
+            {
+                name: "GameFi Launchpad",
+                handle: "gamefilaunch",
+                created: "2024-12-20",
+                followers: 912,
+                description: "IDO platform specialized in gaming and metaverse projects",
+                website: "https://gamefilaunch.com",
+                badge: "hot"
+            },
+            {
+                name: "QuantumDAO",
+                handle: "quantum_dao",
+                created: "2024-12-18",
+                followers: 445,
+                description: "Governance protocol enabling quantum-resistant on-chain voting",
+                website: "https://quantumdao.org",
+                badge: "new"
+            }
+        ];
+
+        // Render projects
+        function renderProjects() {
+            const tbody = document.getElementById('projectsBody');
+            tbody.innerHTML = projects.map(project => `
+                <tr>
+                    <td>
+                        <div class="project-name">${project.name}</div>
+                        <span class="badge badge-${project.badge}">${project.badge.toUpperCase()}</span>
+                    </td>
+                    <td>
+                        <a href="https://twitter.com/${project.handle}" 
+                           target="_blank" 
+                           class="twitter-handle">@${project.handle}</a>
+                    </td>
+                    <td>${new Date(project.created).toLocaleDateString()}</td>
+                    <td>${project.followers}</td>
+                    <td class="description">${project.description}</td>
+                    <td>
+                        <a href="${project.website}" 
+                           target="_blank" 
+                           class="website-link">Visit →</a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Set last update time
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+
+        // Initialize
+        renderProjects();
+    </script>
+</body>
+</html>
