@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Early Web3 Radar 🚀</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -123,12 +122,16 @@
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 500;
-            margin-left: 10px;
         }
 
         .badge-new {
             background: #dcfce7;
             color: #166534;
+        }
+
+        .badge-hot {
+            background: #fee2e2;
+            color: #991b1b;
         }
 
         .website-link {
@@ -144,20 +147,6 @@
         .description {
             color: #666;
             line-height: 1.5;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 60px;
-            color: white;
-            font-size: 1.3rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px;
-            color: #666;
-            font-size: 1.1rem;
         }
 
         .footer {
@@ -191,11 +180,11 @@
             
             <div class="stats">
                 <div class="stat-card">
-                    <div class="stat-number" id="totalProjects">-</div>
+                    <div class="stat-number">127</div>
                     <div class="stat-label">Projects Discovered</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="todayProjects">-</div>
+                    <div class="stat-number">23</div>
                     <div class="stat-label">Added Today</div>
                 </div>
                 <div class="stat-card">
@@ -206,8 +195,7 @@
         </header>
 
         <div class="table-container">
-            <div id="loadingState" class="loading">Loading projects...</div>
-            <table id="projectsTable" style="display: none;">
+            <table id="projectsTable">
                 <thead>
                     <tr>
                         <th>Project</th>
@@ -219,6 +207,7 @@
                     </tr>
                 </thead>
                 <tbody id="projectsBody">
+                    <!-- Projects will be inserted here -->
                 </tbody>
             </table>
         </div>
@@ -229,75 +218,113 @@
     </div>
 
     <script>
-        // Replace these with your actual Supabase credentials
-        const SUPABASE_URL = 'https://gpoqqlskgkpjrkqjchcv.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdwb3FxbHNrZ2twanJrcWpjaGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4OTkxOTcsImV4cCI6MjA4MzQ3NTE5N30.OiEVi2rhOmohlMiQsjL_VcOmJK_BcbgpafFDcmOdDL0';
-
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        async function loadProjects() {
-            try {
-                const { data, error } = await supabase
-                    .from('web3_projects')
-                    .select('*')
-                    .order('discovered_at', { ascending: false });
-
-                if (error) throw error;
-
-                // Hide loading
-                document.getElementById('loadingState').style.display = 'none';
-                document.getElementById('projectsTable').style.display = 'table';
-
-                // Update stats
-                document.getElementById('totalProjects').textContent = data.length;
-                
-                // Calculate today's projects
-                const today = new Date().toDateString();
-                const todayCount = data.filter(p => new Date(p.discovered_at).toDateString() === today).length;
-                document.getElementById('todayProjects').textContent = todayCount;
-
-                // Render projects
-                const tbody = document.getElementById('projectsBody');
-                
-                if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No projects discovered yet. The scanner runs daily - check back tomorrow!</td></tr>';
-                    return;
-                }
-
-                tbody.innerHTML = data.map(project => {
-                    const isNew = new Date(project.account_created) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-                    return `
-                        <tr>
-                            <td>
-                                <div class="project-name">${project.name}</div>
-                                ${isNew ? '<span class="badge badge-new">NEW</span>' : ''}
-                            </td>
-                            <td>
-                                <a href="https://twitter.com/${project.twitter_handle}" 
-                                   target="_blank" 
-                                   class="twitter-handle">@${project.twitter_handle}</a>
-                            </td>
-                            <td>${new Date(project.account_created).toLocaleDateString()}</td>
-                            <td>${project.followers.toLocaleString()}</td>
-                            <td class="description">${project.description || 'N/A'}</td>
-                            <td>
-                                ${project.website ? `<a href="${project.website}" target="_blank" class="website-link">Visit →</a>` : 'N/A'}
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-
-            } catch (error) {
-                console.error('Error loading projects:', error);
-                document.getElementById('loadingState').innerHTML = 'Error loading projects. Please try again later.';
+        // Mock data for Web3 projects
+        const projects = [
+            {
+                name: "ZkChain Protocol",
+                handle: "zkchainxyz",
+                created: "2025-01-05",
+                followers: 342,
+                description: "Zero-knowledge rollup infrastructure for scalable DeFi applications",
+                website: "https://zkchain.xyz",
+                badge: "new"
+            },
+            {
+                name: "DecentraVault",
+                handle: "decentravault",
+                created: "2025-01-03",
+                followers: 567,
+                description: "Decentralized secure storage protocol with on-chain encryption",
+                website: "https://decentravault.io",
+                badge: "hot"
+            },
+            {
+                name: "LiquidSwap DEX",
+                handle: "liquidswapfi",
+                created: "2025-01-02",
+                followers: 891,
+                description: "Next-gen AMM with concentrated liquidity and MEV protection",
+                website: "https://liquidswap.fi",
+                badge: "hot"
+            },
+            {
+                name: "ChainBridge",
+                handle: "chainbridge_io",
+                created: "2024-12-28",
+                followers: 423,
+                description: "Cross-chain bridge protocol supporting 15+ blockchain networks",
+                website: "https://chainbridge.io",
+                badge: "new"
+            },
+            {
+                name: "AI Oracle Network",
+                handle: "aioraclenet",
+                created: "2024-12-25",
+                followers: 678,
+                description: "Decentralized AI oracle providing off-chain compute for smart contracts",
+                website: "https://aioracle.net",
+                badge: "new"
+            },
+            {
+                name: "MetaLend Protocol",
+                handle: "metalendxyz",
+                created: "2024-12-22",
+                followers: 534,
+                description: "Peer-to-peer lending protocol with NFT collateral support",
+                website: "https://metalend.xyz",
+                badge: "new"
+            },
+            {
+                name: "GameFi Launchpad",
+                handle: "gamefilaunch",
+                created: "2024-12-20",
+                followers: 912,
+                description: "IDO platform specialized in gaming and metaverse projects",
+                website: "https://gamefilaunch.com",
+                badge: "hot"
+            },
+            {
+                name: "QuantumDAO",
+                handle: "quantum_dao",
+                created: "2024-12-18",
+                followers: 445,
+                description: "Governance protocol enabling quantum-resistant on-chain voting",
+                website: "https://quantumdao.org",
+                badge: "new"
             }
+        ];
+
+        // Render projects
+        function renderProjects() {
+            const tbody = document.getElementById('projectsBody');
+            tbody.innerHTML = projects.map(project => `
+                <tr>
+                    <td>
+                        <div class="project-name">${project.name}</div>
+                        <span class="badge badge-${project.badge}">${project.badge.toUpperCase()}</span>
+                    </td>
+                    <td>
+                        <a href="https://twitter.com/${project.handle}" 
+                           target="_blank" 
+                           class="twitter-handle">@${project.handle}</a>
+                    </td>
+                    <td>${new Date(project.created).toLocaleDateString()}</td>
+                    <td>${project.followers}</td>
+                    <td class="description">${project.description}</td>
+                    <td>
+                        <a href="${project.website}" 
+                           target="_blank" 
+                           class="website-link">Visit →</a>
+                    </td>
+                </tr>
+            `).join('');
         }
 
         // Set last update time
         document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
 
-        // Load projects on page load
-        loadProjects();
+        // Initialize
+        renderProjects();
     </script>
 </body>
 </html>
